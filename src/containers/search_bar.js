@@ -1,7 +1,7 @@
-// import necessary things
-//    connect method to connect container to redux (work w redux directly)
-//    bind action fetch weather to container - bindActionCreators
-//    import action creator
+// imports
+//    connect method to connect container to redux (work with redux directly)
+//    bindActionCreators - bind action fetchWeather to container
+//    action creator fetchWeather
 
 
 import React, { Component } from 'react';
@@ -9,39 +9,36 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { fetchWeather } from '../actions/index';
 
-// need to bind search-bar container to redux using connect method from react-redux library
-// also going to bind action creator fetch weather as a property to this container
-
 class SearchBar extends Component {
 constructor(props) {
   super(props);
 
   this.state = { term: '' };
-  // take existing function, bind to this, and replace existing function with same function but correct context
-  // binds this of component to onInputChange. if this isn't done, context of onInputChange will be incorrect
+  // Take an existing function, bind to this, and replace existing function with same function but in the correct context
+  // Binds this of component to onInputChange. If not done, context of onInputChange will be incorrect
   this.onInputChange = this.onInputChange.bind(this);
   this.onFormSubmit = this.onFormSubmit.bind(this);
 }
 
 onInputChange(event) {
   console.log(event.target.value);
-  // in this case, this is not the react search bar component. when call a callback like onInputChange and reference this,
+  // In this case, this is not the react search bar component. When call a callback like onInputChange and reference this,
   //   this will have incorrect context.
-  // because of this, need to bind context of onInputChange.
+  // Solved by binding the context of onInputChange (done in constructor)
   this.setState({ term: event.target.value });
 }
 
 onFormSubmit(event) {
   event.preventDefault();
 
-  // go fetch weather data
+  // Go fetch weather data
   this.props.fetchWeather(this.state.term);
-  // reset state, rerender component and empty input on enter.
+  // Reset state, rerender component and empty input on enter.
   this.setState({ term: '' });
 }
 
   render() {
-    // need onFormSubmit so something happens when form submitted. otherwise just resets.
+    // Need onFormSubmit so something happens when form submitted. Otherwise form just resets.
     return (
       <form onSubmit={this.onFormSubmit} className="input-group">
         <input
@@ -59,14 +56,13 @@ onFormSubmit(event) {
 }
 
 function mapDispatchToProps(dispacth) {
-  // bind action creator fetchWeather with dispatch - make sure action flows down into middleware and then reducers inside our redux app
-
+  // Bind action creator fetchWeather with dispatch - make sure action flows down into middleware and then reducers inside our redux app
   return bindActionCreators({ fetchWeather}, dispacth);
 }
 
-// previously had containers where we map dispatch to props and we map state to props as well.
-// passing in null because whenever we are passing in a function that is supposed to map our dispatch to the props of our container,
-//   it alwayds goes in as the secvond arg.
-//   null - understand that redux is maintaining some state but this container doesn't care
+// Need to bind SearchBar container to redux using the connect method from react-redux library
+// Second argument ensures that the action creator fetchWeather will be binded as a property to this container
 
+// Previously had containers where we map dispatch to props and we map state to props as well.
+// First argument is null because this container does not care about the state being maintained by redux.
 export default connect(null, mapDispatchToProps)(SearchBar);

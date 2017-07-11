@@ -11,7 +11,7 @@ class WeatherList extends Component {
         const pressure = cityData.list.map(weather => weather.main.pressure);
         const humidity = cityData.list.map(weather => weather.main.humidity);
         console.log(temps);
-        // es6 syntax - find coord obj, grab lon and lat off of it, and assign to lon and lat vars
+        // ES6 syntax - find coord object, grab lon and lat properties off of it, and assign to lon and lat vars
         const { lon, lat } = cityData.city.coord;
 
         return (
@@ -49,16 +49,15 @@ class WeatherList extends Component {
     }
 }
 
-// es6 syntax: instead of parameter state, make { weather }
-// when key & value are identical, can do { weather } instead of weather: weather
-// return state.weather because we assigned weather reducer to weather key in combinedReducer
-
-// when reducer pushes new state to component, calls this and then state passed into props
+// ES6 syntax: instead of parameter state and then using state.weather, parameter is weather { weather }
+// When key & value are identical, can do { weather } instead of weather: weather
+// Return state.weather (or {weather}) because we assigned weather reducer to weather key in combinedReducer
+// When reducer pushes new state to component, calls this and then the state is passed into props
 function mapStateToProps({weather}) {
     return { weather };
 }
 
-// connects to redux store
-// connects component WeatherList with state mapping
-// exporting connected version
+// Connects to redux store
+// Connects component WeatherList with state mapping
+// Exports connected version
 export default connect(mapStateToProps)(WeatherList);
